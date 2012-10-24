@@ -65,7 +65,45 @@
 
 + (NSString *)descriptionOfProgram:(id)program
 {
-    return @"Implement this in assignment 2";
+    NSMutableArray *stack;
+    if ([program isKindOfClass:[NSArray class]]) {
+       stack = [program mutableCopy];
+    }
+    
+    return ([self descriptionOfTopOfStack:stack]);
+}
+
++ (NSString *)descriptionOfTopOfStack:(NSMutableArray *)stack
+{
+    
+    NSString *result;
+    
+    NSLog(@"%@", stack);
+    id topOfStack = [stack lastObject];
+    if (topOfStack) [stack removeLastObject];
+    
+    if ([topOfStack isKindOfClass:[NSNumber class]] || [CalculatorBrain isVariable:topOfStack]) {
+        result = [NSString stringWithFormat:@"%@", topOfStack];
+    } else if ([topOfStack isKindOfClass:[NSString class]]) {
+        
+        //a + b
+        if ([CalculatorBrain isOperation:topOfStack]) {
+            NSString *first = [self descriptionOfTopOfStack:stack];
+            NSString *second = [self descriptionOfTopOfStack:stack];
+            result = [NSString stringWithFormat:@"(%@ %@ %@)", second, topOfStack, first];
+        }
+        // 3 pi
+        else if ([topOfStack isEqualToString:@"pi"]) {
+            result = [NSString stringWithFormat:@"pi"];//, [self descriptionOfTopOfStack:topOfStack]];
+        }
+        // sin(a)
+        else {
+            result = [NSString stringWithFormat:@"%@(%@)", topOfStack, [self descriptionOfTopOfStack:stack]];
+        }
+
+    }
+    
+    return result;
 }
 
 
@@ -100,8 +138,6 @@
          } else if ([operation isEqualToString:@"pi"]) {
              result = 3.14159;
          } 
-        
-        
     }
     
     return result;
@@ -120,6 +156,7 @@
     for (int i=0; i<[stack count]; i++) {
         id key = [stack objectAtIndex:i];
         BOOL isVariable = [CalculatorBrain isVariable:key];
+        NSLog(@"%@ is variable: %d", key, isVariable);
         id value = [variableValues objectForKey:key];
 
         if (isVariable && [value isKindOfClass:[NSNumber class]]) {
@@ -135,15 +172,19 @@
 + (BOOL) isVariable:(id)object
 {
     NSSet *ops = [NSSet setWithObjects:@"+", @"*", @"-", @"/", @"sin", @"cos", @"sqrt", @"pi", nil];
-    return ([object isKindOfClass:[NSString class]] && [ops containsObject:object]);
+    return ([object isKindOfClass:[NSString class]] && ![ops containsObject:object]);
+}
 
++ (BOOL) isOperation:(id)object
+{
+        NSSet *ops = [NSSet setWithObjects:@"+", @"*", @"-", @"/", nil];
+        return ([ops containsObject:object]);
 }
 
 + (NSSet *)variablesUsedInProgram:(id)program
 {
     NSMutableArray *vars;
 
-    
     for (int i=0; i<[program count]; i++) {
         id key = [program objectAtIndex:i];
         

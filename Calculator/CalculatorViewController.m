@@ -48,41 +48,22 @@ int brainDisplayLength = 0;
     // append digit to current text
     if (self.userIsInTheMiddleOfEnteringANumber) {
         self.display.text = [self.display.text stringByAppendingString:digit];
-        
-        // limit brainDisplay to 30 characters
-        if (brainDisplayLength < 30) {
-            self.brainDisplay.text = [self.brainDisplay.text stringByAppendingString:digit];
-            brainDisplayLength += [digit length];
-        }
-
     } 
     
     // current digit replaces current text
     else {
         self.display.text = digit;
-        
-        // limit brainDisplay to 30 characters
-        if (brainDisplayLength < 30) {
-            self.brainDisplay.text = [self.brainDisplay.text stringByAppendingString:digit];
-            brainDisplayLength += [digit length];
-        }
-
         self.userIsInTheMiddleOfEnteringANumber = YES;
     }
+    self.brainDisplay.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
 }
 
 
 
-- (IBAction)enterPressed {
-    // add a space after each digit is entered
-    if (brainDisplayLength < 30) {
-        self.brainDisplay.text = [self.brainDisplay.text stringByAppendingString:@" "];
-        brainDisplayLength += 1;
-    }
-    
-    // pressing Enter after pi puts it on the stack twice b/c it's an operation
-//    if ([NSNumberFormatterNoStyle numberFromString:self.display.text])
+- (IBAction)enterPressed { 
     [self.brain pushOperand:[self.display.text doubleValue]];
+    self.brainDisplay.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
+    
     self.userIsInTheMiddleOfEnteringANumber = NO;
     self.userIsInTheMiddleOfEnteringAFloat = NO;
 }
@@ -94,19 +75,9 @@ int brainDisplayLength = 0;
     NSString *operation = [sender currentTitle];
     
     double result = [self.brain performOperation:operation];
-    
-    // limit brainDisplay to 30 characters
-    if (brainDisplayLength < 30) {
-        self.brainDisplay.text = [self.brainDisplay.text stringByAppendingString:operation];
-        brainDisplayLength += [operation length];
-    }
+
     self.display.text = [NSString stringWithFormat:@"%g", result];
-    
-    // add a space after each operation is entered
-    if (brainDisplayLength < 30) {
-        self.brainDisplay.text = [self.brainDisplay.text stringByAppendingString:@" "];
-        brainDisplayLength += 1;
-    }
+    self.brainDisplay.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
 
 }
 
@@ -114,7 +85,7 @@ int brainDisplayLength = 0;
 - (IBAction)variablePressed:(id)sender {
     NSString *var = [sender currentTitle];
     
-    // append digit to current text
+    // do nothing
     if (self.userIsInTheMiddleOfEnteringANumber) {
         return;
         
@@ -124,14 +95,8 @@ int brainDisplayLength = 0;
     else {
         self.display.text = var;
         
-        // limit brainDisplay to 30 characters
-        if (brainDisplayLength < 30) {
-            self.brainDisplay.text = [self.brainDisplay.text stringByAppendingString:var];
-            self.brainDisplay.text = [self.brainDisplay.text stringByAppendingString:@" "];
-            brainDisplayLength += [var length];
-        }
-
         [self.brain pushVariable:var];
+        self.brainDisplay.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
         self.userIsInTheMiddleOfEnteringANumber = NO;
         self.userIsInTheMiddleOfEnteringAFloat = NO;
     }
@@ -160,7 +125,6 @@ int brainDisplayLength = 0;
     NSArray *objs = [[NSArray alloc] initWithObjects:x, y, nil];
 
     NSDictionary *dict = [[NSDictionary alloc] initWithObjects:objs forKeys:keys];
-    NSLog(@"getting passed to set variables: %@", dict);
     [self.brain setVariableValues:dict];
 }
 

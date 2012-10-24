@@ -2,6 +2,15 @@
 <Bucket
    type = "1"
    version = "1.0">
+   <SymbolicBreakpoints>
+      <SymbolicBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         symbolName = "objc_exception_throw"
+         moduleName = "libobjc.Y.dylib">
+      </SymbolicBreakpoint>
+   </SymbolicBreakpoints>
    <ExceptionBreakpoints>
       <ExceptionBreakpoint
          shouldBeEnabled = "Yes"
@@ -11,8 +20,10 @@
          stopOnStyle = "0">
          <Actions>
             <BreakpointActionProxy
-               ActionType = "Xcode.BreakpointAction.DebuggerCommand">
-               <ActionContent>
+               ActionType = "Xcode.BreakpointAction.Log">
+               <ActionContent
+                  message = "Caught here @exp@"
+                  conveyanceType = "0">
                </ActionContent>
             </BreakpointActionProxy>
          </Actions>
