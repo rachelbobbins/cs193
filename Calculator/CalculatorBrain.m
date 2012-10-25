@@ -65,11 +65,19 @@
 + (NSString *)descriptionOfProgram:(id)program
 {
     NSMutableArray *stack;
+    NSString *result = @"";
     if ([program isKindOfClass:[NSArray class]]) {
        stack = [program mutableCopy];
     }
     
-    return ([self descriptionOfTopOfStack:stack]);
+    while ([stack count] > 0) {
+        result = [[self descriptionOfTopOfStack:stack] stringByAppendingString:result];
+        if ([stack count] > 0) {
+            result = [@", " stringByAppendingString:result];
+        }
+    }
+//    }
+    return result;
 }
 
 + (NSString *)descriptionOfTopOfStack:(NSMutableArray *)stack
@@ -96,11 +104,6 @@
         }
 
     }
-    /*TODO: Endcase, when there are extra operands not displayed*/
-//     if ([stack count] != 0) {
-//         result = [result stringByAppendingString:@", "];
-//         result = [result stringByAppendingString:[stack componentsJoinedByString:@", "]];
-//     }
     return result;
 }
 
