@@ -96,7 +96,12 @@
         if ([CalculatorBrain isOperation:topOfStack]) {
             NSString *op1 = [self descriptionOfTopOfStack:stack];
             NSString *op2 = [self descriptionOfTopOfStack:stack];
-            result = [NSString stringWithFormat:@"(%@ %@ %@)", op2, topOfStack, op1];
+            
+            if ([topOfStack isEqualToString:@"*"] || [topOfStack isEqualToString:@"/"]){
+                result = [NSString stringWithFormat:@"%@ %@ %@", op2, topOfStack, op1];
+            }else {
+                result = [NSString stringWithFormat:@"(%@ %@ %@)", op2, topOfStack, op1];
+            }
         }
         // sin(a)
         else {
