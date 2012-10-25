@@ -20,6 +20,7 @@
 
 @synthesize display;
 @synthesize brainDisplay;
+@synthesize varDisplay;
 @synthesize userIsInTheMiddleOfEnteringANumber;
 @synthesize userIsInTheMiddleOfEnteringAFloat;
 @synthesize testVariableValues;
@@ -37,13 +38,11 @@ int brainDisplayLength = 0;
     
     NSString *digit = [sender currentTitle];
     
-    // if user enters a decimal for first time
+    // can only have 1 decimal point per number; no ip addresses
     if ([digit isEqualToString:@"."] && !self.userIsInTheMiddleOfEnteringAFloat) {
         self.userIsInTheMiddleOfEnteringAFloat = YES;
-    } 
-    
-    // user can't add another decimal point
-    else if ([digit isEqualToString:@"."] && self.userIsInTheMiddleOfEnteringAFloat) {
+    } else if ([digit isEqualToString:@"."] && self.userIsInTheMiddleOfEnteringAFloat)
+    {
         return;
     }
     
@@ -128,13 +127,17 @@ int brainDisplayLength = 0;
     NSArray *objs = [[NSArray alloc] initWithObjects:x, y, nil];
 
     NSDictionary *dict = [[NSDictionary alloc] initWithObjects:objs forKeys:keys];
+    
+    self.varDisplay.text = [NSString stringWithFormat:@"X = %@, Y = %@", x, y];
     self.testVariableValues = dict;
-//    [self.brain pushVariableValues:dict];
 }
 
 - (IBAction)clear {
     self.display.text = @"0";
     self.brainDisplay.text = @"";
+    
+    [self testPressed:nil];
+    
     self.userIsInTheMiddleOfEnteringANumber = NO;
     self.userIsInTheMiddleOfEnteringAFloat = NO;
     brainDisplayLength = 0;
