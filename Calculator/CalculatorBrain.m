@@ -34,7 +34,7 @@
 //    return _variableValues;
 //}
 
-- (void)setVariableValues:(NSDictionary *)variableValues
+- (void)pushVariableValues:(NSDictionary *)variableValues
 {
     _variableValues = variableValues;
 }
@@ -48,7 +48,6 @@
 {
     [self.programStack addObject:variable];
 }
-
 
 
 -(double)performOperation:(NSString *)operation
@@ -75,26 +74,21 @@
 
 + (NSString *)descriptionOfTopOfStack:(NSMutableArray *)stack
 {
-    
     NSString *result;
     
-    NSLog(@"%@", stack);
     id topOfStack = [stack lastObject];
     if (topOfStack) [stack removeLastObject];
     
-    if ([topOfStack isKindOfClass:[NSNumber class]] || [CalculatorBrain isVariable:topOfStack]) {
+    //1, a, or pi
+    if ([topOfStack isKindOfClass:[NSNumber class]] || [CalculatorBrain isVariable:topOfStack] || [topOfStack isEqualToString:@"pi"]) {
         result = [NSString stringWithFormat:@"%@", topOfStack];
     } else if ([topOfStack isKindOfClass:[NSString class]]) {
         
         //a + b
         if ([CalculatorBrain isOperation:topOfStack]) {
-            NSString *first = [self descriptionOfTopOfStack:stack];
-            NSString *second = [self descriptionOfTopOfStack:stack];
-            result = [NSString stringWithFormat:@"(%@ %@ %@)", second, topOfStack, first];
-        }
-        // 3 pi
-        else if ([topOfStack isEqualToString:@"pi"]) {
-            result = [NSString stringWithFormat:@"pi"];//, [self descriptionOfTopOfStack:topOfStack]];
+            NSString *op1 = [self descriptionOfTopOfStack:stack];
+            NSString *op2 = [self descriptionOfTopOfStack:stack];
+            result = [NSString stringWithFormat:@"(%@ %@ %@)", op2, topOfStack, op1];
         }
         // sin(a)
         else {
@@ -102,7 +96,11 @@
         }
 
     }
-    
+    /*TODO: Endcase, when there are extra operands not displayed*/
+//     if ([stack count] != 0) {
+//         result = [result stringByAppendingString:@", "];
+//         result = [result stringByAppendingString:[stack componentsJoinedByString:@", "]];
+//     }
     return result;
 }
 
@@ -156,7 +154,7 @@
     for (int i=0; i<[stack count]; i++) {
         id key = [stack objectAtIndex:i];
         BOOL isVariable = [CalculatorBrain isVariable:key];
-        NSLog(@"%@ is variable: %d", key, isVariable);
+
         id value = [variableValues objectForKey:key];
 
         if (isVariable && [value isKindOfClass:[NSNumber class]]) {
@@ -180,6 +178,7 @@
         NSSet *ops = [NSSet setWithObjects:@"+", @"*", @"-", @"/", nil];
         return ([ops containsObject:object]);
 }
+
 
 + (NSSet *)variablesUsedInProgram:(id)program
 {

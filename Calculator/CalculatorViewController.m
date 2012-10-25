@@ -13,6 +13,7 @@
 @property (nonatomic) BOOL userIsInTheMiddleOfEnteringANumber;
 @property (nonatomic) BOOL userIsInTheMiddleOfEnteringAFloat;
 @property (nonatomic, strong) CalculatorBrain *brain;
+@property (nonatomic) NSDictionary *testVariableValues;
 @end
 
 @implementation CalculatorViewController
@@ -21,6 +22,7 @@
 @synthesize brainDisplay;
 @synthesize userIsInTheMiddleOfEnteringANumber;
 @synthesize userIsInTheMiddleOfEnteringAFloat;
+@synthesize testVariableValues;
 @synthesize brain = _brain;
 
 int brainDisplayLength = 0;
@@ -74,7 +76,9 @@ int brainDisplayLength = 0;
     }
     NSString *operation = [sender currentTitle];
     
+    [self.brain pushVariableValues: [self testVariableValues]];
     double result = [self.brain performOperation:operation];
+
 
     self.display.text = [NSString stringWithFormat:@"%g", result];
     self.brainDisplay.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
@@ -88,7 +92,6 @@ int brainDisplayLength = 0;
     // do nothing
     if (self.userIsInTheMiddleOfEnteringANumber) {
         return;
-        
     } 
     
     // current digit replaces current text
@@ -125,7 +128,8 @@ int brainDisplayLength = 0;
     NSArray *objs = [[NSArray alloc] initWithObjects:x, y, nil];
 
     NSDictionary *dict = [[NSDictionary alloc] initWithObjects:objs forKeys:keys];
-    [self.brain setVariableValues:dict];
+    self.testVariableValues = dict;
+//    [self.brain pushVariableValues:dict];
 }
 
 - (IBAction)clear {
