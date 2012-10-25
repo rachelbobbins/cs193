@@ -16,7 +16,7 @@
 @implementation CalculatorBrain;
 
 @synthesize programStack = _programStack;
-@synthesize variableValues = _variableValues;
+
 
 - (NSMutableArray *)programStack
 {
@@ -26,18 +26,6 @@
     return _programStack;
 }
 
-//- (NSDictionary *)variableValues
-//{
-//    if (_variableValues == nil) {
-//        _variableValues = [[NSDictionary alloc] init];
-//    }
-//    return _variableValues;
-//}
-
-- (void)pushVariableValues:(NSDictionary *)variableValues
-{
-    _variableValues = variableValues;
-}
 -(void)pushOperand:(double)operand
 {
     NSNumber *operandObject = [NSNumber numberWithDouble:operand];
@@ -50,10 +38,10 @@
 }
 
 
--(double)performOperation:(NSString *)operation
+-(double)performOperation:(NSString *)operation usingVariableValues:(NSDictionary *)variableValues
 {
     [self.programStack addObject:operation];
-    return [CalculatorBrain runProgram:self.program usingVariableValues:self.variableValues];
+    return [CalculatorBrain runProgram:self.program usingVariableValues:variableValues];
     
 }
 

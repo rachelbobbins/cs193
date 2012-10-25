@@ -75,8 +75,8 @@ int brainDisplayLength = 0;
     }
     NSString *operation = [sender currentTitle];
     
-    [self.brain pushVariableValues: [self testVariableValues]];
-    double result = [self.brain performOperation:operation];
+//    [self.brain pushVariableValues: [self testVariableValues]];
+    double result = [self.brain performOperation:operation usingVariableValues:self.testVariableValues];
 
 
     self.display.text = [NSString stringWithFormat:@"%g", result];
@@ -120,10 +120,15 @@ int brainDisplayLength = 0;
        x = [NSNumber numberWithInt:-6];
        y = [NSNumber numberWithInt:4];
 
-    } else {
+    } else if ([test isEqualToString:@"Test 3"]) {
+        self.testVariableValues = nil;
+        self.varDisplay.text = @"No X/Y values set";
+        return;
+    }else {
        x = [NSNumber numberWithInt:0];
        y = [NSNumber numberWithInt:0];
     }
+    
     NSArray *objs = [[NSArray alloc] initWithObjects:x, y, nil];
 
     NSDictionary *dict = [[NSDictionary alloc] initWithObjects:objs forKeys:keys];
@@ -143,5 +148,23 @@ int brainDisplayLength = 0;
     brainDisplayLength = 0;
     [self.brain clear];
 }
+
+- (IBAction)undo:(id)sender {
+    if (self.userIsInTheMiddleOfEnteringANumber) {
+        NSString *currentDisplay = self.display.text;
+        self.display.text = [currentDisplay substringToIndex:[currentDisplay length] -1];
+    } else {
+        self.display.text = [[self.brain program] lastObject];
+    }
+}
+
+//- (void) updateDisplays {
+//    self.brainDisplay.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
+//    
+////    for (i = 0; i < [[self.brain variablesUsedInProgram] count]; i++) {
+////        s
+////    }
+//    self.varDisplay.text =
+//}
 
 @end
