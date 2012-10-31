@@ -14,6 +14,7 @@
 - (double)performOperation:(NSString *)operation usingVariableValues:(NSDictionary *)variableValues;
 - (void)clear;
 - (void)pushVariable:(NSString *)variable;
+- (void)removeLastObject;
 
 @property (readonly) id program;
 

@@ -49,10 +49,7 @@ int brainDisplayLength = 0;
     // append digit to current text
     if (self.userIsInTheMiddleOfEnteringANumber) {
         self.display.text = [self.display.text stringByAppendingString:digit];
-    } 
-    
-    // current digit replaces current text
-    else {
+    } else {
         self.display.text = digit;
         self.userIsInTheMiddleOfEnteringANumber = YES;
     }
@@ -63,8 +60,7 @@ int brainDisplayLength = 0;
 
 - (IBAction)enterPressed { 
     [self.brain pushOperand:[self.display.text doubleValue]];
-    self.brainDisplay.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
-    
+    [self updateDisplays];
     self.userIsInTheMiddleOfEnteringANumber = NO;
     self.userIsInTheMiddleOfEnteringAFloat = NO;
 }
@@ -75,34 +71,24 @@ int brainDisplayLength = 0;
     }
     NSString *operation = [sender currentTitle];
     
-//    [self.brain pushVariableValues: [self testVariableValues]];
-    double result = [self.brain performOperation:operation usingVariableValues:self.testVariableValues];
+    [self.brain performOperation:operation usingVariableValues:self.testVariableValues];
 
-
-    self.display.text = [NSString stringWithFormat:@"%g", result];
-    self.brainDisplay.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
-
+    [self updateDisplays];
 }
 
 
 - (IBAction)variablePressed:(id)sender {
     NSString *var = [sender currentTitle];
-    
-    // do nothing
+
     if (self.userIsInTheMiddleOfEnteringANumber) {
         return;
-    } 
-    
-    // current digit replaces current text
-    else {
-        self.display.text = var;
-        
-        [self.brain pushVariable:var];
-        self.brainDisplay.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
-        self.userIsInTheMiddleOfEnteringANumber = NO;
-        self.userIsInTheMiddleOfEnteringAFloat = NO;
     }
     
+    [self.brain pushVariable:var];
+    [self updateDisplays];
+    
+    self.userIsInTheMiddleOfEnteringANumber = NO;
+    self.userIsInTheMiddleOfEnteringAFloat = NO;
 }
 
 - (IBAction)testPressed:(id)sender {
@@ -124,7 +110,7 @@ int brainDisplayLength = 0;
         self.testVariableValues = nil;
         self.varDisplay.text = @"No X/Y values set";
         return;
-    }else {
+    } else {
        x = [NSNumber numberWithInt:0];
        y = [NSNumber numberWithInt:0];
     }
@@ -132,39 +118,62 @@ int brainDisplayLength = 0;
     NSArray *objs = [[NSArray alloc] initWithObjects:x, y, nil];
 
     NSDictionary *dict = [[NSDictionary alloc] initWithObjects:objs forKeys:keys];
-    
-    self.varDisplay.text = [NSString stringWithFormat:@"X = %@, Y = %@", x, y];
     self.testVariableValues = dict;
+    [self updateDisplays];
 }
 
 - (IBAction)clear {
-    self.display.text = @"0";
-    self.brainDisplay.text = @"";
-    
     [self testPressed:nil];
     
     self.userIsInTheMiddleOfEnteringANumber = NO;
     self.userIsInTheMiddleOfEnteringAFloat = NO;
-    brainDisplayLength = 0;
     [self.brain clear];
+    [self updateDisplays];
 }
 
 - (IBAction)undo:(id)sender {
+    NSString *currentDisplay = self.display.text;
     if (self.userIsInTheMiddleOfEnteringANumber) {
-        NSString *currentDisplay = self.display.text;
+        /*TODO: Figure out whether last digit entered is a decimal point.
+         if yes, then after deleting it, user is no longer in the middle of entering a float*/
+        
+        
         self.display.text = [currentDisplay substringToIndex:[currentDisplay length] -1];
+        
+        if ([self.display.text isEqualToString:@""]) {
+            [self updateDisplays];
+            self.userIsInTheMiddleOfEnteringAFloat = NO;
+            self.userIsInTheMiddleOfEnteringANumber = NO;
+        } 
+       
     } else {
-        self.display.text = [[self.brain program] lastObject];
+        NSLog(@"program: %@", [self.brain program]);
+        [self.brain removeLastObject];
+        [self updateDisplays];
     }
 }
 
-//- (void) updateDisplays {
-//    self.brainDisplay.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
-//    
-////    for (i = 0; i < [[self.brain variablesUsedInProgram] count]; i++) {
-////        s
-////    }
-//    self.varDisplay.text =
-//}
+- (void) updateDisplays {
+    //program display
+    self.brainDisplay.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
+    
+    //variable display
+    NSString *varDisp = @"";
+    NSLog(@"vars used in program:%@", [CalculatorBrain variablesUsedInProgram:[self.brain program]]);
+    
+    /*TODO: Figure out why variables used in program isn't working*/
+   for (NSString *var in [CalculatorBrain variablesUsedInProgram:[self.brain program]]) {
+       NSLog(@"%@", varDisp);
+       NSNumber *val = [self.testVariableValues objectForKey:var];
+       varDisp = [varDisp stringByAppendingString:[NSString stringWithFormat:@"%@ = %@, ", var, val]];
+   }
+    
+    self.varDisplay.text = varDisp;
+    
+    //result display
+    double result = [CalculatorBrain runProgram:[self.brain program] usingVariableValues:self.testVariableValues];
+    
+    self.display.text = [NSString stringWithFormat:@"%g", result];
+}
 
 @end

@@ -45,6 +45,11 @@
     
 }
 
+-(void)removeLastObject
+{
+    [self.programStack removeLastObject];
+}
+
 - (id)program
 {
     return [self.programStack copy];
@@ -182,12 +187,15 @@
 
     for (int i=0; i<[program count]; i++) {
         id key = [program objectAtIndex:i];
+        NSLog(@"Object at %i is %@. is variable: %d", i, key, [CalculatorBrain isVariable: key]);
         
         if ([CalculatorBrain isVariable:key]) {
             [vars addObject:key];
         }
     }
-    return [NSSet setWithArray:vars];
+    NSSet *foo = [NSSet setWithArray:vars];
+    NSLog(@"vars used in meth: %@", foo);
+    return foo;
 }
 
 -(void)clear
