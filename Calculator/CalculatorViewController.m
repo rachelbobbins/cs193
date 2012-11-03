@@ -20,7 +20,7 @@
 
 @synthesize display;
 @synthesize brainDisplay;
-@synthesize varDisplay;
+//@synthesize varDisplay;
 @synthesize userIsInTheMiddleOfEnteringANumber;
 @synthesize userIsInTheMiddleOfEnteringAFloat;
 @synthesize testVariableValues;
@@ -90,40 +90,8 @@ int brainDisplayLength = 0;
     self.userIsInTheMiddleOfEnteringAFloat = NO;
 }
 
-- (IBAction)testPressed:(id)sender {
-    NSString *test = [sender currentTitle];
-    
-    NSArray *keys = [[NSArray alloc] initWithObjects:@"X", @"Y", nil];
-    NSNumber *x;
-    NSNumber *y;
-    
-    if ([test isEqualToString:@"Test 1"]) {
-        x = [NSNumber numberWithInt:5];
-        y = [NSNumber numberWithInt:3];
-
-    } else if ([test isEqualToString:@"Test 2"]) {
-       x = [NSNumber numberWithInt:-6];
-       y = [NSNumber numberWithInt:4];
-
-    } else if ([test isEqualToString:@"Test 3"]) {
-        self.testVariableValues = nil;
-        self.varDisplay.text = @"No X/Y values set";
-        return;
-    } else {
-       x = [NSNumber numberWithInt:0];
-       y = [NSNumber numberWithInt:0];
-    }
-    
-    NSArray *objs = [[NSArray alloc] initWithObjects:x, y, nil];
-
-    NSDictionary *dict = [[NSDictionary alloc] initWithObjects:objs forKeys:keys];
-    self.testVariableValues = dict;
-    [self updateDisplays];
-}
 
 - (IBAction)clear {
-    [self testPressed:nil];
-    
     self.userIsInTheMiddleOfEnteringANumber = NO;
     self.userIsInTheMiddleOfEnteringAFloat = NO;
     [self.brain clear];
@@ -153,13 +121,13 @@ int brainDisplayLength = 0;
     self.brainDisplay.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
     
     //variable display
-    NSString *varDisp = @"";
-    
-   for (NSString *var in [CalculatorBrain variablesUsedInProgram:[self.brain program]]) {
-       NSNumber *val = [self.testVariableValues objectForKey:var];
-       varDisp = [varDisp stringByAppendingString:[NSString stringWithFormat:@"%@ = %@, ", var, val]];
-   }
-    self.varDisplay.text = varDisp;
+//    NSString *varDisp = @"";
+//    
+//   for (NSString *var in [CalculatorBrain variablesUsedInProgram:[self.brain program]]) {
+//       NSNumber *val = [self.testVariableValues objectForKey:var];
+//       varDisp = [varDisp stringByAppendingString:[NSString stringWithFormat:@"%@ = %@, ", var, val]];
+//   }
+//    self.varDisplay.text = varDisp;
     
     //result display
     double result = [CalculatorBrain runProgram:[self.brain program] usingVariableValues:self.testVariableValues];
