@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5AFBAB281645A2CE007433CB /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AFBAB271645A2CE007433CB /* Default-568h@2x.png */; };
 		AD1F28591625BB0100207BE6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD1F28581625BB0100207BE6 /* UIKit.framework */; };
 		AD1F285B1625BB0100207BE6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD1F285A1625BB0100207BE6 /* Foundation.framework */; };
 		AD1F285D1625BB0100207BE6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD1F285C1625BB0100207BE6 /* CoreGraphics.framework */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5AFBAB271645A2CE007433CB /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		AD1F28541625BB0100207BE6 /* Calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calculator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD1F28581625BB0100207BE6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		AD1F285A1625BB0100207BE6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -53,6 +55,7 @@
 		AD1F28491625BB0100207BE6 = {
 			isa = PBXGroup;
 			children = (
+				5AFBAB271645A2CE007433CB /* Default-568h@2x.png */,
 				AD1F285E1625BB0100207BE6 /* Calculator */,
 				AD1F28571625BB0100207BE6 /* Frameworks */,
 				AD1F28551625BB0100207BE6 /* Products */,
@@ -155,6 +158,7 @@
 			files = (
 				AD1F28631625BB0100207BE6 /* InfoPlist.strings in Resources */,
 				AD1F286C1625BB0100207BE6 /* MainStoryboard.storyboard in Resources */,
+				5AFBAB281645A2CE007433CB /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -214,7 +218,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -232,7 +236,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -280,6 +284,7 @@
 				AD1F28741625BB0100207BE6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

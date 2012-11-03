@@ -69,7 +69,6 @@
             result = [@", " stringByAppendingString:result];
         }
     }
-//    }
     return result;
 }
 
@@ -183,19 +182,16 @@
 
 + (NSSet *)variablesUsedInProgram:(id)program
 {
-    NSMutableArray *vars;
+    NSMutableArray *vars = [[NSMutableArray alloc] init];
 
     for (int i=0; i<[program count]; i++) {
         id key = [program objectAtIndex:i];
-        NSLog(@"Object at %i is %@. is variable: %d", i, key, [CalculatorBrain isVariable: key]);
-        
         if ([CalculatorBrain isVariable:key]) {
             [vars addObject:key];
         }
     }
-    NSSet *foo = [NSSet setWithArray:vars];
-    NSLog(@"vars used in meth: %@", foo);
-    return foo;
+    return [NSSet setWithArray:vars];
+
 }
 
 -(void)clear
