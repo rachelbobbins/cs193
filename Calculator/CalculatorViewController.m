@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
+#import "GraphViewController.h"
 #import "CalculatorViewController.h"
 #import "CalculatorBrain.h" 
 
@@ -13,17 +14,14 @@
 @property (nonatomic) BOOL userIsInTheMiddleOfEnteringANumber;
 @property (nonatomic) BOOL userIsInTheMiddleOfEnteringAFloat;
 @property (nonatomic, strong) CalculatorBrain *brain;
-@property (nonatomic) NSDictionary *testVariableValues;
 @end
 
 @implementation CalculatorViewController
 
 @synthesize display;
 @synthesize brainDisplay;
-//@synthesize varDisplay;
 @synthesize userIsInTheMiddleOfEnteringANumber;
 @synthesize userIsInTheMiddleOfEnteringAFloat;
-@synthesize testVariableValues;
 @synthesize brain = _brain;
 
 int brainDisplayLength = 0;
@@ -70,8 +68,8 @@ int brainDisplayLength = 0;
         [self enterPressed];
     }
     NSString *operation = [sender currentTitle];
-    
-    [self.brain performOperation:operation usingVariableValues:self.testVariableValues];
+    [self.brain performOperation:operation usingVariableValues:nil];
+//    [self.brain performOperation:operation usingVariableValues:self.testVariableValues];
     [self updateDisplays];
 }
 
@@ -120,20 +118,20 @@ int brainDisplayLength = 0;
     //program display
     self.brainDisplay.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
     
-    //variable display
-//    NSString *varDisp = @"";
-//    
-//   for (NSString *var in [CalculatorBrain variablesUsedInProgram:[self.brain program]]) {
-//       NSNumber *val = [self.testVariableValues objectForKey:var];
-//       varDisp = [varDisp stringByAppendingString:[NSString stringWithFormat:@"%@ = %@, ", var, val]];
-//   }
-//    self.varDisplay.text = varDisp;
-    
     //result display
-    double result = [CalculatorBrain runProgram:[self.brain program] usingVariableValues:self.testVariableValues];
+//    double result = [CalculatorBrain runProgram:[self.brain program] usingVariableValues:self.testVariableValues];
+        double result = [CalculatorBrain runProgram:[self.brain program] usingVariableValues:nil];
     self.display.text = [NSString stringWithFormat:@"%g", result];
 }
 
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"segueToGraphView"]) {
+        GraphViewController *newController = [segue destinationViewController];
+        [newController setProgram:[self.brain program]];
+
+    }
+}
 
 - (IBAction)showGraph
 {

@@ -12,4 +12,5 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *display;
 @property (weak, nonatomic) IBOutlet UILabel *brainDisplay;
+//- (void)performSegueWithIdentifier:(NSString *)segueId sender:(id)sender;
 @end

@@ -132,6 +132,7 @@
 + (void)drawAxesInRect:(CGRect)bounds originAtPoint:(CGPoint)axisOrigin scale:(CGFloat)pointsPerUnit
 {
 	CGContextRef context = UIGraphicsGetCurrentContext();
+    NSLog(@"Called axes function");
 
 	UIGraphicsPushContext(context);
 
