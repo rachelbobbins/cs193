@@ -134,4 +134,9 @@ int brainDisplayLength = 0;
     self.display.text = [NSString stringWithFormat:@"%g", result];
 }
 
+
+- (IBAction)showGraph
+{
+    [self performSegueWithIdentifier:@"segueToGraphView" sender:self];
+}
 @end
