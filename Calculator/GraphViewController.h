@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface GraphViewController : UIViewController
+@property (nonatomic) NSArray *program;
 @property (weak, nonatomic) IBOutlet UILabel *programLabel;
 - (void)setProgram:(NSArray *)program;
 @end

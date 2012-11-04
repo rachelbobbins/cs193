@@ -8,12 +8,14 @@
 
 #import <UIKit/UIKit.h>
 @class GraphView;
-@protocol GraphViewDataSource
 
+@protocol GraphViewDataSource
+- (float)forGraphView:(GraphView *)sender findYForX:(float)x;
 @end
 
 @interface GraphView : UIView
 
 @property (nonatomic) CGPoint origin;
+@property (nonatomic, weak) IBOutlet id <GraphViewDataSource> dataSource;
 
 @end

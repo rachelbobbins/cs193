@@ -10,8 +10,7 @@
 #import "GraphView.h"
 
 @interface GraphViewController () <GraphViewDataSource>
-@property (nonatomic) NSArray *program;
-@property (weak, nonatomic) IBOutlet GraphView *graphView;
+@property (nonatomic, weak) IBOutlet GraphView *graphView;
 @end
 
 @implementation GraphViewController
@@ -21,22 +20,24 @@
 -(void)setProgram:(NSArray *)program
 {
     _program = program;
-    
+//    [self.graphView setNeedsDisplay];
 }
 
 - (void)setGraphView:(GraphView *)graphView
 {
-    NSLog(@"setting graphView");
+    NSLog(@"calling setGraphView");
     _graphView = graphView;
+    self.graphView.dataSource = self;
+    NSLog(@"sees data source as: %@", self.graphView);
+
 }
 
+- (float)forGraphView:(GraphView *)sender findYForX:(float)x 
+{
+    NSDict
+    return [CalculatorBrain runProgram:self.program usingVariableValues:<#(NSDictionary *)#>];
+}
 
-/*You’ll need an IBOutlet in your new Controller to point to your graphing
- view for a variety of reasons. Your graphing view needs its data source
- delegate set, gesture recognizers added to it, and it needs to told that
- it needs to redraw itself when its data source delegate would provide
- different data if asked aga
-*/
 
 //
 //- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
