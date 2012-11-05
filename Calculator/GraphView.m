@@ -12,7 +12,9 @@
 @implementation GraphView
 
 @synthesize dataSource = _dataSource;
+@synthesize pointsPerUnit = _pointsPerUnit;
 
+#define DEFAULT_POINTSPERUNIT 1;
 - (void)setup
 {
     self.contentMode = UIViewContentModeRedraw; // if our bounds changes, redraw ourselves
@@ -32,56 +34,50 @@
     [self setup];
 }
 
-//- (float)convertFromGraphCoordinateToPixel:(double)x
-//{
-//    
-//}
-
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
+- (CGFloat)pointsPerUnit
+{
+    if (!_pointsPerUnit) {
+        return DEFAULT_POINTSPERUNIT;
+    } else {
+        return _pointsPerUnit;
+    }
+}
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
     
+    //draw the axes
     CGContextSetLineWidth(context, 3.0);
     [[UIColor redColor]setStroke];
     
-    CGFloat scale = 1;
     CGPoint origin;
     origin.x = self.bounds.origin.x + self.bounds.size.width/2;
     origin.y = self.bounds.origin.y + self.bounds.size.height/2;
-    [AxesDrawer drawAxesInRect:self.bounds originAtPoint:origin scale:scale];
+    [AxesDrawer drawAxesInRect:self.bounds originAtPoint:origin scale:self.pointsPerUnit];
 
+    //beginning of line
     CGPoint previous;
-    previous.x = 0;
-    previous.y = 0;
+    previous.x = self.bounds.size.width/2.0 - origin.x;
+    previous.y = -1 * [self.dataSource forGraphView:self findYForX:0.0] + self.bounds.size.height /2.0;
     
     CGContextBeginPath(context);
     
-    for (float X = 0; X <= self.bounds.size.width; X++)
+    for (float x_point = 1; x_point <= self.bounds.size.width; x_point++)
     {
 
         CGContextMoveToPoint(context, previous.x, previous.y);
-        CGPoint point;
-        point.x = X;
         
-
-        /*
-        convert X to graph coordinates (from pixel coordinates)
-         */
+        //convert x_point (in pixel coordinates) to graph coordinates, find y, convert to pixel system
+        float x = x_point/self.pointsPerUnit - self.bounds.size.width/(2.0 * self.pointsPerUnit);
+        float y = [self.dataSource forGraphView:self findYForX:x]; //y in graph coordinates
+        float y_point = -y/self.pointsPerUnit + self.bounds.size.height/(2.0 * self.pointsPerUnit);
         
-        float Y = [self.dataSource forGraphView:self findYForX:X ];
-        /*
-         convert Y to pixel coordinates (from graph coordinates)
-         */
-        
-        point.y = Y;
        //draw the line from previous point to new point
-        CGContextAddLineToPoint(context, point.x, point.y);
+        CGContextAddLineToPoint(context, x_point, y_point);
 
         //reset previous to current point
-        previous.x = point.x;
-        previous.y = point.y;
+        previous.x = x_point;
+        previous.y = y_point;
     }
     
     

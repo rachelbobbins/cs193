@@ -34,8 +34,7 @@
 
 - (float)forGraphView:(GraphView *)sender findYForX:(float)x 
 {
-    NSDict
-    return [CalculatorBrain runProgram:self.program usingVariableValues:<#(NSDictionary *)#>];
+    return [CalculatorBrain runProgram:self.program usingVariableValue:[NSNumber numberWithFloat:x]];
 }
 
 

@@ -38,10 +38,10 @@
 }
 
 
--(double)performOperation:(NSString *)operation usingVariableValues:(NSDictionary *)variableValues
+-(double)performOperation:(NSString *)operation usingVariableValue:(NSNumber *)value
 {
     [self.programStack addObject:operation];
-    return [CalculatorBrain runProgram:self.program usingVariableValues:variableValues];
+    return [CalculatorBrain runProgram:self.program usingVariableValue:value];
     
 }
 
@@ -143,7 +143,7 @@
 
 
 
-+ (double) runProgram:(id)program usingVariableValues:(NSDictionary *)variableValues
++ (double) runProgram:(id)program usingVariableValue:(NSNumber *)value
 {
     NSMutableArray *stack;
     
@@ -155,12 +155,8 @@
         id key = [stack objectAtIndex:i];
         BOOL isVariable = [CalculatorBrain isVariable:key];
 
-        id value = [variableValues objectForKey:key];
-
         if (isVariable && [value isKindOfClass:[NSNumber class]]) {
             [stack replaceObjectAtIndex:i withObject:value];
-        } else if (isVariable && value == nil) {
-            [stack replaceObjectAtIndex:i withObject:[NSNumber numberWithInt:0]];
         }
     }
     

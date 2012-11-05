@@ -68,7 +68,7 @@ int brainDisplayLength = 0;
         [self enterPressed];
     }
     NSString *operation = [sender currentTitle];
-    [self.brain performOperation:operation usingVariableValues:nil];
+    [self.brain performOperation:operation usingVariableValue:nil];
 //    [self.brain performOperation:operation usingVariableValues:self.testVariableValues];
     [self updateDisplays];
 }
@@ -120,7 +120,7 @@ int brainDisplayLength = 0;
     
     //result display
 //    double result = [CalculatorBrain runProgram:[self.brain program] usingVariableValues:self.testVariableValues];
-        double result = [CalculatorBrain runProgram:[self.brain program] usingVariableValues:nil];
+        double result = [CalculatorBrain runProgram:[self.brain program] usingVariableValue:nil];
     self.display.text = [NSString stringWithFormat:@"%g", result];
 }
 
