@@ -42,6 +42,24 @@
         return _pointsPerUnit;
     }
 }
+
+-(void)setPointsPerUnit:(CGFloat)pointsPerUnit
+{
+    if (pointsPerUnit != _pointsPerUnit) {
+        _pointsPerUnit = pointsPerUnit;
+        [self setNeedsDisplay]; // any time our scale changes, call for redraw
+    }
+}
+
+- (void)pinch:(UIPinchGestureRecognizer *)gesture;
+{
+    if ((gesture.state == UIGestureRecognizerStateChanged) ||
+        (gesture.state == UIGestureRecognizerStateEnded)) {
+        [self setPointsPerUnit:(self.pointsPerUnit *= gesture.scale)]; // adjust our scale
+        gesture.scale = 1;           // reset gestures scale to 1 (so future changes are incremental, not cumulative)
+    }
+}
+
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -55,33 +73,31 @@
     origin.y = self.bounds.origin.y + self.bounds.size.height/2;
     [AxesDrawer drawAxesInRect:self.bounds originAtPoint:origin scale:self.pointsPerUnit];
 
-    //beginning of line
+
     CGPoint previous;
-    previous.x = self.bounds.size.width/2.0 - origin.x;
-    previous.y = -1 * [self.dataSource forGraphView:self findYForX:0.0] + self.bounds.size.height /2.0;
-    
-    CGContextBeginPath(context);
-    
-    for (float x_point = 1; x_point <= self.bounds.size.width; x_point++)
+    for (float x_point = 0; x_point <= self.bounds.size.width; x_point++)
     {
-
-        CGContextMoveToPoint(context, previous.x, previous.y);
+        /*referred to http://ipadiphoneprogramming.blogspot.com/2012/04/assignment-3-part-1-stanford-university.html
+        for help with scaling factors*/
         
-        //convert x_point (in pixel coordinates) to graph coordinates, find y, convert to pixel system
         float x = x_point/self.pointsPerUnit - self.bounds.size.width/(2.0 * self.pointsPerUnit);
-        float y = [self.dataSource forGraphView:self findYForX:x]; //y in graph coordinates
-        float y_point = -y/self.pointsPerUnit + self.bounds.size.height/(2.0 * self.pointsPerUnit);
-        
-       //draw the line from previous point to new point
-        CGContextAddLineToPoint(context, x_point, y_point);
+        float y = [self.dataSource forGraphView:self findYForX:x]; 
+        float y_point = -y*self.pointsPerUnit + self.bounds.size.height/(2.0);
 
+        if (x_point == 0) {
+            CGContextBeginPath(context);
+        } else {
+            CGContextMoveToPoint(context, previous.x, previous.y);
+            CGContextAddLineToPoint(context, x_point, y_point);
+        }
+        
         //reset previous to current point
         previous.x = x_point;
         previous.y = y_point;
     }
     
     
-    CGContextSetLineWidth(context, 3.0);
+    CGContextSetLineWidth(context, 2.0);
     [[UIColor blueColor]setStroke];
     CGContextStrokePath(context);
 }

@@ -18,5 +18,6 @@
 @property (nonatomic) CGPoint origin;
 @property (nonatomic) CGFloat pointsPerUnit;
 @property (nonatomic, weak) IBOutlet id <GraphViewDataSource> dataSource;
+- (void)pinch:(UIPinchGestureRecognizer *)gesture;
 
 @end

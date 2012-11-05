@@ -20,16 +20,16 @@
 -(void)setProgram:(NSArray *)program
 {
     _program = program;
-//    [self.graphView setNeedsDisplay];
+    [self.graphView setNeedsDisplay];
 }
 
 - (void)setGraphView:(GraphView *)graphView
 {
-    NSLog(@"calling setGraphView");
     _graphView = graphView;
+    [self.graphView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self.graphView action:@selector(pinch:)]];
+    
+    self.programLabel.text = [CalculatorBrain descriptionOfProgram:self.program];
     self.graphView.dataSource = self;
-    NSLog(@"sees data source as: %@", self.graphView);
-
 }
 
 - (float)forGraphView:(GraphView *)sender findYForX:(float)x 
@@ -52,7 +52,6 @@
 {
     [super viewDidLoad];
 
-    self.programLabel.text = [CalculatorBrain descriptionOfProgram:self.program];
 }
 //
 //- (void)didReceiveMemoryWarning

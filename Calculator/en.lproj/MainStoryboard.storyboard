@@ -9,7 +9,7 @@
         <scene sceneID="Fov-UF-JzX">
             <objects>
                 <viewController id="3H3-vY-VOs" customClass="GraphViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="T6D-3C-Ahz" customClass="GraphView">
+                    <view key="view" contentMode="scaleToFill" id="T6D-3C-Ahz">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
@@ -20,15 +20,20 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" id="Mpw-VW-LmB" customClass="GraphView">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="3H3-vY-VOs" id="E0H-sY-cjy"/>
+                                </connections>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <connections>
-                            <outlet property="dataSource" destination="3H3-vY-VOs" id="uch-MC-pCd"/>
-                        </connections>
                     </view>
                     <navigationItem key="navigationItem" title="Graph" id="6Ec-jY-jmm"/>
                     <connections>
-                        <outlet property="programLabel" destination="XKJ-3S-9qN" id="AcY-he-pkH"/>
+                        <outlet property="graphView" destination="Mpw-VW-LmB" id="mUY-rg-55c"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xnI-Va-lzE" userLabel="First Responder" sceneMemberID="firstResponder"/>
