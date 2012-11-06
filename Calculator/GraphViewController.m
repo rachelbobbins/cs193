@@ -27,8 +27,10 @@
 {
     _graphView = graphView;
     [self.graphView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self.graphView action:@selector(pinch:)]];
+    UITapGestureRecognizer *tripleTap = [[UITapGestureRecognizer alloc] initWithTarget:self.graphView action:@selector(moveOrigin:)];
+    [tripleTap setNumberOfTapsRequired:3];
+    [self.graphView addGestureRecognizer:tripleTap];
     
-    self.programLabel.text = [CalculatorBrain descriptionOfProgram:self.program];
     self.graphView.dataSource = self;
 }
 
@@ -51,6 +53,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.programLabel.text = [CalculatorBrain descriptionOfProgram:self.program];
 
 }
 //
