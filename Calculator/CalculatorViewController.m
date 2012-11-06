@@ -32,8 +32,8 @@ int brainDisplayLength = 0;
     return _brain;
 }
 
-- (IBAction)digitPressed:(UIButton *)sender {
-    
+- (IBAction)digitPressed:(UIButton *)sender
+{
     NSString *digit = [sender currentTitle];
     
     // can only have 1 decimal point per number; no ip addresses
@@ -56,11 +56,15 @@ int brainDisplayLength = 0;
 
 
 
-- (IBAction)enterPressed { 
-    [self.brain pushOperand:[self.display.text doubleValue]];
-    [self updateDisplays];
-    self.userIsInTheMiddleOfEnteringANumber = NO;
-    self.userIsInTheMiddleOfEnteringAFloat = NO;
+- (IBAction)enterPressed {
+    if (![self.display.text isEqualToString:@""]) //case when x has been pushed to stack, disp is empty
+    {
+        [self.brain pushOperand:[self.display.text doubleValue]];
+        [self updateDisplays];
+        self.userIsInTheMiddleOfEnteringANumber = NO;
+        self.userIsInTheMiddleOfEnteringAFloat = NO;
+    }
+
 }
 
 - (IBAction)operationPressed:(id)sender {
@@ -69,7 +73,6 @@ int brainDisplayLength = 0;
     }
     NSString *operation = [sender currentTitle];
     [self.brain performOperation:operation usingVariableValue:nil];
-//    [self.brain performOperation:operation usingVariableValues:self.testVariableValues];
     [self updateDisplays];
 }
 
@@ -82,10 +85,13 @@ int brainDisplayLength = 0;
     }
     
     [self.brain pushVariable:var];
-    [self updateDisplays];
-    
     self.userIsInTheMiddleOfEnteringANumber = NO;
     self.userIsInTheMiddleOfEnteringAFloat = NO;
+    
+    [self updateDisplays];
+    //don't use updateDisplay, because we want to clear the display. not put a 0 there.
+    self.brainDisplay.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
+    self.display.text = @"";
 }
 
 
