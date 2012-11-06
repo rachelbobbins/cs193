@@ -119,8 +119,7 @@ int brainDisplayLength = 0;
     self.brainDisplay.text = [CalculatorBrain descriptionOfProgram:self.brain.program];
     
     //result display
-//    double result = [CalculatorBrain runProgram:[self.brain program] usingVariableValues:self.testVariableValues];
-        double result = [CalculatorBrain runProgram:[self.brain program] usingVariableValue:nil];
+    double result = [CalculatorBrain runProgram:[self.brain program] usingVariableValue:nil];
     self.display.text = [NSString stringWithFormat:@"%g", result];
 }
 
@@ -129,7 +128,6 @@ int brainDisplayLength = 0;
     if ([segue.identifier isEqualToString:@"segueToGraphView"]) {
         GraphViewController *newController = [segue destinationViewController];
         [newController setProgram:[self.brain program]];
-
     }
 }
 

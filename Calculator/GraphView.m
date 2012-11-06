@@ -47,12 +47,10 @@
 - (CGPoint)origin
 {
     if (!_origin.x || !_origin.y) {
-        NSLog(@"%f, %f", self.bounds.origin.x, self.bounds.size.width);
         _origin.x = self.bounds.origin.x + self.bounds.size.width/2;
         _origin.y = self.bounds.origin.y + self.bounds.size.height/2;
     }
     return _origin;
-//    }
 }
 
 -(void)setPointsPerUnit:(CGFloat)pointsPerUnit
@@ -65,27 +63,40 @@
 
 - (void)setOrigin:(CGPoint)origin
 {
-    NSLog(@"called set origin");
     if ((origin.x != _origin.x) || (origin.y != _origin.y)) {
         _origin = origin;
         [self setNeedsDisplay];
     }
 }
 
-- (void)pinch:(UIPinchGestureRecognizer *)gesture;
+- (void)pinch:(UIPinchGestureRecognizer *)gesture
 {
     if ((gesture.state == UIGestureRecognizerStateChanged) ||
         (gesture.state == UIGestureRecognizerStateEnded)) {
-        [self setPointsPerUnit:(self.pointsPerUnit *= gesture.scale)]; // adjust our scale
-        gesture.scale = 1;           // reset gestures scale to 1 (so future changes are incremental, not cumulative)
+        [self setPointsPerUnit:(self.pointsPerUnit *= gesture.scale)];
+        gesture.scale = 1;
     }
 }
 
-- (void)moveOrigin:(UITapGestureRecognizer *)gesture;
+- (void)jumpToNewOrigin:(UIGestureRecognizer *)gesture
 {
     CGPoint newOrigin = [gesture locationInView:self];
-    NSLog(@"%f, %f", newOrigin.x, newOrigin.y);
     [self setOrigin:newOrigin];
+}
+
+- (void)panToNewOrigin:(UIPanGestureRecognizer *)gesture
+{
+    if((gesture.state == UIGestureRecognizerStateChanged) ||
+       (gesture.state == UIGestureRecognizerStateEnded))
+    {
+        CGPoint translation = [gesture translationInView:self];
+        
+        CGPoint newOrigin;
+        newOrigin.x = self.origin.x + translation.x;
+        newOrigin.y = self.origin.y + translation.y;
+        [gesture setTranslation:(CGPointMake(0.0, 0.0)) inView:self];
+        [self setOrigin:newOrigin];
+    }
 }
 
 - (void)drawRect:(CGRect)rect
@@ -97,13 +108,10 @@
     [[UIColor redColor]setStroke];
     [AxesDrawer drawAxesInRect:self.bounds originAtPoint:self.origin scale:self.pointsPerUnit];
 
-
+    //draw the graph
     CGPoint previous;
     for (float x_point = 0; x_point <= self.bounds.size.width; x_point++)
     {
-        /*referred to http://ipadiphoneprogramming.blogspot.com/2012/04/assignment-3-part-1-stanford-university.html
-        for help with scaling factors*/
-        
         float x = x_point/self.pointsPerUnit - self.origin.x/self.pointsPerUnit;
         float y = [self.dataSource forGraphView:self findYForX:x]; 
         float y_point = (-y)*self.pointsPerUnit +  self.origin.y;

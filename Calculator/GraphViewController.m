@@ -21,17 +21,22 @@
 {
     _program = program;
     [self.graphView setNeedsDisplay];
+    self.programLabel.text = [CalculatorBrain descriptionOfProgram:self.program];
 }
 
 - (void)setGraphView:(GraphView *)graphView
 {
     _graphView = graphView;
+
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self.graphView action:@selector(jumpToNewOrigin:)];
+    [doubleTap setNumberOfTapsRequired:2];
+    
+    [self.graphView addGestureRecognizer:doubleTap];
     [self.graphView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self.graphView action:@selector(pinch:)]];
-    UITapGestureRecognizer *tripleTap = [[UITapGestureRecognizer alloc] initWithTarget:self.graphView action:@selector(moveOrigin:)];
-    [tripleTap setNumberOfTapsRequired:3];
-    [self.graphView addGestureRecognizer:tripleTap];
+    [self.graphView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self.graphView action:@selector(panToNewOrigin:)]];
     
     self.graphView.dataSource = self;
+    self.programLabel.text = [CalculatorBrain descriptionOfProgram:self.program];
 }
 
 - (float)forGraphView:(GraphView *)sender findYForX:(float)x 
@@ -54,7 +59,7 @@
 {
     [super viewDidLoad];
     
-    self.programLabel.text = [CalculatorBrain descriptionOfProgram:self.program];
+//    self.programLabel.text = [CalculatorBrain descriptionOfProgram:self.program];
 
 }
 //
